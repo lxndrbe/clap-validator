@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic
 Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.3] - 2026-07-13
+
+### Added
+
+- DAW-typical lifecycle and state tests
+- Hidden parameter randomization
+
+### Changed
+
+- Updated dependencies and migrated to Rust 2024 edition
+- Cherry-picked upstream PRs #27, #28, #29
+- Fork maintained at lxndrbe/clap-validator
+
 ## [Unreleased]
 
 ### Changed
