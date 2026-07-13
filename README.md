@@ -1,15 +1,17 @@
 # clap-validator
 
-[![Automated builds](https://github.com/free-audio/clap-validator/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/free-audio/clap-validator/actions/workflows/build.yml?query=branch%3Amaster)
+[![Automated builds](https://github.com/lxndrbe/clap-validator/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/lxndrbe/clap-validator/actions/workflows/build.yml?query=branch%3Amaster)
 
 A validator and automatic test suite for [CLAP](https://github.com/free-audio/clap) plugins. Clap-validator can automatically test one or more plugins for common bugs and incorrect behavior.
+
+> **This is a maintained fork** of [free-audio/clap-validator](https://github.com/free-audio/clap-validator) with DAW-typical lifecycle tests, updated dependencies, and Rust 2024 edition.
 
 ## Download
 
 Prebuilt binaries can be found on the [releases
-page](https://github.com/free-audio/clap-validator/releases). Development builds
+page](https://github.com/lxndrbe/clap-validator/releases). Development builds
 can be found
-[here](https://nightly.link/free-audio/clap-validator/workflows/build/master).
+[here](https://nightly.link/lxndrbe/clap-validator/workflows/build/master).
 The macOS builds are unsigned and may require Gatekeeper to be disabled or the
 quarantine bit to be removed
 ([instructions](https://disable-gatekeeper.github.io/)).
