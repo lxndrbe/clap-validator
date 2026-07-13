@@ -584,7 +584,7 @@ impl<'a> ParamFuzzer<'a> {
                 // We can send parameter changes for parameters that are not automatable:
                 //
                 // > The host can send live user changes for this parameter regardless of this flag.
-                if param_info.readonly() || param_info.hidden() {
+                if param_info.readonly() {
                     return None;
                 }
 
