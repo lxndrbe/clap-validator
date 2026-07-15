@@ -77,8 +77,8 @@ pub struct OutOfPlaceAudioBuffers<'a> {
 
     // These are point to `inputs` and `outputs` because `clap_audio_buffer` needs to contain a
     // `*const *const f32`
-    _input_channel_pointers: Vec<Vec<*const f32>>,
-    _output_channel_pointers: Vec<Vec<*const f32>>,
+    _input_channel_pointers: Vec<Vec<*mut f32>>,
+    _output_channel_pointers: Vec<Vec<*mut f32>>,
     clap_inputs: Vec<clap_audio_buffer>,
     clap_outputs: Vec<clap_audio_buffer>,
 
@@ -302,22 +302,22 @@ impl<'a> OutOfPlaceAudioBuffers<'a> {
             }
         }
 
-        let input_channel_pointers: Vec<Vec<*const f32>> = inputs
+        let input_channel_pointers: Vec<Vec<*mut f32>> = inputs
             .iter()
             .map(|channel_slices| {
                 channel_slices
                     .iter()
-                    .map(|channel_slice| channel_slice.as_ptr())
+                    .map(|channel_slice| channel_slice.as_ptr() as *mut f32)
                     .collect()
             })
             .collect();
-        // These are always `*const` pointers in CLAP, even for output buffers
-        let output_channel_pointers: Vec<Vec<*const f32>> = outputs
+        // Output buffers use `data32`/`data64` which are `*mut` pointers in clap-sys 0.5+
+        let output_channel_pointers: Vec<Vec<*mut f32>> = outputs
             .iter()
             .map(|channel_slices| {
                 channel_slices
                     .iter()
-                    .map(|channel_slice| channel_slice.as_ptr())
+                    .map(|channel_slice| channel_slice.as_ptr() as *mut f32)
                     .collect()
             })
             .collect();
@@ -325,8 +325,8 @@ impl<'a> OutOfPlaceAudioBuffers<'a> {
         let clap_inputs: Vec<clap_audio_buffer> = input_channel_pointers
             .iter()
             .map(|channel_pointers| clap_audio_buffer {
-                data32: channel_pointers.as_ptr(),
-                data64: std::ptr::null(),
+                data32: channel_pointers.as_ptr() as *mut *mut f32,
+                data64: std::ptr::null_mut(),
                 channel_count: channel_pointers.len() as u32,
                 // TODO: Do some interesting tests with these two fields
                 latency: 0,
@@ -336,8 +336,8 @@ impl<'a> OutOfPlaceAudioBuffers<'a> {
         let clap_outputs: Vec<clap_audio_buffer> = output_channel_pointers
             .iter()
             .map(|channel_pointers| clap_audio_buffer {
-                data32: channel_pointers.as_ptr(),
-                data64: std::ptr::null(),
+                data32: channel_pointers.as_ptr() as *mut *mut f32,
+                data64: std::ptr::null_mut(),
                 channel_count: channel_pointers.len() as u32,
                 latency: 0,
                 constant_mask: 0,

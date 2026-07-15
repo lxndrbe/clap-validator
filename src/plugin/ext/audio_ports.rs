@@ -5,9 +5,8 @@ use clap_sys::ext::audio_ports::{
     CLAP_EXT_AUDIO_PORTS, CLAP_PORT_MONO, CLAP_PORT_STEREO, clap_audio_port_info,
     clap_plugin_audio_ports,
 };
-use clap_sys::ext::draft::ambisonic::CLAP_PORT_AMBISONIC;
-use clap_sys::ext::draft::cv::CLAP_PORT_CV;
-use clap_sys::ext::draft::surround::CLAP_PORT_SURROUND;
+use clap_sys::ext::ambisonic::CLAP_PORT_AMBISONIC;
+use clap_sys::ext::surround::CLAP_PORT_SURROUND;
 use clap_sys::id::CLAP_INVALID_ID;
 use std::collections::HashMap;
 use std::ffi::CStr;
@@ -248,10 +247,10 @@ fn is_audio_port_type_consistent(info: &clap_audio_port_info) -> Result<()> {
             );
         }
     } else if port_type == CLAP_PORT_SURROUND
-        || port_type == CLAP_PORT_CV
         || port_type == CLAP_PORT_AMBISONIC
     {
         // TODO: Test the channel counts by querying those extensions
+        // Note: CLAP_PORT_CV removed in CLAP 1.2.0
         Ok(())
     } else {
         log::debug!("TODO: Unknown audio port type '{port_type:?}'");

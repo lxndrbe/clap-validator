@@ -21,6 +21,25 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.3.4] - 2026-07-15
+
+### Changed
+
+- Updated `clap-sys` from pinned git dependency (CLAP 1.1.8) to crates.io
+  `clap-sys` 0.5.0 (CLAP 1.2.2). This covers 10 CLAP spec revisions forward.
+- Fixed imports for stabilized extensions: `ambisonic`, `surround`,
+  `preset_load` moved from `ext::draft` to `ext`.
+- Fixed imports for stabilized factory: `preset_discovery` moved from
+  `factory::draft` to `factory`.
+- Updated `clap_plugin_id` → `clap_universal_plugin_id` (CLAP 1.2.0 rename).
+- Updated `clap_timestamp` and `CLAP_TIMESTAMP_UNKNOWN` to import from
+  `clap_sys::timestamp` (no longer re-exported from `factory::preset_discovery`).
+- Updated `clap_audio_buffer::data32`/`data64` to `*mut` pointers (clap-sys
+  0.5.0 mutability change).
+- Removed `CLAP_PORT_CV` reference (CV extension removed in CLAP 1.2.0).
+
+## [0.3.3]
+
 ### Changed
 
 - Having both the `CLAP_PARAM_IS_READONLY` flag and any of the

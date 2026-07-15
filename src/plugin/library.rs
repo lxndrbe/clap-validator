@@ -2,7 +2,7 @@
 
 use anyhow::{Context, Result};
 use clap_sys::entry::clap_plugin_entry;
-use clap_sys::factory::draft::preset_discovery::{
+use clap_sys::factory::preset_discovery::{
     CLAP_PRESET_DISCOVERY_FACTORY_ID, clap_preset_discovery_factory,
 };
 use clap_sys::factory::plugin_factory::{CLAP_PLUGIN_FACTORY_ID, clap_plugin_factory};

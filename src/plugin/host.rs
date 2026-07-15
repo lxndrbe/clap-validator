@@ -2,7 +2,7 @@
 
 use anyhow::{Context, Result};
 use clap_sys::ext::audio_ports::{CLAP_EXT_AUDIO_PORTS, clap_host_audio_ports};
-use clap_sys::ext::draft::preset_load::{CLAP_EXT_PRESET_LOAD, clap_host_preset_load};
+use clap_sys::ext::preset_load::{CLAP_EXT_PRESET_LOAD, clap_host_preset_load};
 use clap_sys::ext::note_ports::{
     CLAP_EXT_NOTE_PORTS, CLAP_NOTE_DIALECT_CLAP, CLAP_NOTE_DIALECT_MIDI,
     CLAP_NOTE_DIALECT_MIDI_MPE, clap_host_note_ports, clap_note_dialect,
@@ -12,7 +12,7 @@ use clap_sys::ext::params::{
 };
 use clap_sys::ext::state::{CLAP_EXT_STATE, clap_host_state};
 use clap_sys::ext::thread_check::{CLAP_EXT_THREAD_CHECK, clap_host_thread_check};
-use clap_sys::factory::draft::preset_discovery::clap_preset_discovery_location_kind;
+use clap_sys::factory::preset_discovery::clap_preset_discovery_location_kind;
 use clap_sys::host::clap_host;
 use clap_sys::id::clap_id;
 use clap_sys::plugin::clap_plugin;

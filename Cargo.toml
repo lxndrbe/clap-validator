@@ -1,20 +1,20 @@
 [package]
 name = "clap-validator"
-version = "0.3.3"
+version = "0.3.4"
 edition = "2024"
 license = "MIT"
 
 description = "A validator and automatic test suite for CLAP plugins (lxndrbe fork with DAW lifecycle tests)"
 readme = "README.md"
-repository = "https://github.com/lxndrbe/clap-validator"
+repository = "https://github.com/LX-Audiolabs/clap-validator"
 
 [dependencies]
 anyhow = "1.0.58"
 chrono = { version = "0.4.23", features = ["serde"] }
 # All the claps!
 clap = { version = "4.1.8", features = ["derive", "wrap_help"] }
-# For CLAP 1.1.8 support
-clap-sys = { git = "https://github.com/robbert-vdh/clap-sys.git", rev = "04779b57663f6f3f710cb813bde0e499a6515d17" }
+# CLAP 1.2.2 support (upstream clap-sys tracks ~8 revs behind latest)
+clap-sys = "0.5.0"
 colored = "3.1.1"
 crossbeam = "0.8.1"
 libloading = "0.9.0"

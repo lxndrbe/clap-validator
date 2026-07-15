@@ -8,7 +8,7 @@ use std::pin::Pin;
 use std::ptr::NonNull;
 use walkdir::WalkDir;
 
-use clap_sys::factory::draft::preset_discovery::clap_preset_discovery_provider;
+use clap_sys::factory::preset_discovery::clap_preset_discovery_provider;
 
 use super::indexer::{Indexer, IndexerResults};
 use super::metadata_receiver::{MetadataReceiver, PresetFile};
