@@ -345,6 +345,7 @@ impl Params<'_> {
     }
 }
 
+#[allow(dead_code)]
 impl Param {
     /// Whether the parameter is hidden and should be ignored.
     pub fn hidden(&self) -> bool {
