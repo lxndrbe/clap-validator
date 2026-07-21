@@ -2,7 +2,12 @@
 
 use anyhow::{Context, Result};
 use clap_sys::ext::audio_ports::{CLAP_EXT_AUDIO_PORTS, clap_host_audio_ports};
-use clap_sys::ext::preset_load::{CLAP_EXT_PRESET_LOAD, clap_host_preset_load};
+use clap_sys::ext::latency::{CLAP_EXT_LATENCY, clap_host_latency};
+use clap_sys::ext::log::{
+    CLAP_EXT_LOG, CLAP_LOG_DEBUG, CLAP_LOG_ERROR, CLAP_LOG_FATAL, CLAP_LOG_HOST_MISBEHAVING,
+    CLAP_LOG_INFO, CLAP_LOG_PLUGIN_MISBEHAVING, CLAP_LOG_WARNING, clap_host_log,
+    clap_log_severity,
+};
 use clap_sys::ext::note_ports::{
     CLAP_EXT_NOTE_PORTS, CLAP_NOTE_DIALECT_CLAP, CLAP_NOTE_DIALECT_MIDI,
     CLAP_NOTE_DIALECT_MIDI_MPE, clap_host_note_ports, clap_note_dialect,
@@ -10,7 +15,9 @@ use clap_sys::ext::note_ports::{
 use clap_sys::ext::params::{
     CLAP_EXT_PARAMS, clap_host_params, clap_param_clear_flags, clap_param_rescan_flags,
 };
+use clap_sys::ext::preset_load::{CLAP_EXT_PRESET_LOAD, clap_host_preset_load};
 use clap_sys::ext::state::{CLAP_EXT_STATE, clap_host_state};
+use clap_sys::ext::tail::{CLAP_EXT_TAIL, clap_host_tail};
 use clap_sys::ext::thread_check::{CLAP_EXT_THREAD_CHECK, clap_host_thread_check};
 use clap_sys::factory::preset_discovery::clap_preset_discovery_location_kind;
 use clap_sys::host::clap_host;
@@ -73,10 +80,13 @@ pub struct Host {
 
     // These are the vtables for the extensions supported by the host
     clap_host_audio_ports: clap_host_audio_ports,
+    clap_host_latency: clap_host_latency,
+    clap_host_log: clap_host_log,
     clap_host_note_ports: clap_host_note_ports,
     clap_host_params: clap_host_params,
     clap_host_preset_load: clap_host_preset_load,
     clap_host_state: clap_host_state,
+    clap_host_tail: clap_host_tail,
     clap_host_thread_check: clap_host_thread_check,
 }
 
@@ -257,6 +267,12 @@ impl Host {
                 is_rescan_flag_supported: Some(Self::ext_audio_ports_is_rescan_flag_supported),
                 rescan: Some(Self::ext_audio_ports_rescan),
             },
+            clap_host_latency: clap_host_latency {
+                changed: Some(Self::ext_latency_changed),
+            },
+            clap_host_log: clap_host_log {
+                log: Some(Self::ext_log_log),
+            },
             clap_host_note_ports: clap_host_note_ports {
                 supported_dialects: Some(Self::ext_note_ports_supported_dialects),
                 rescan: Some(Self::ext_note_ports_rescan),
@@ -272,6 +288,9 @@ impl Host {
             },
             clap_host_state: clap_host_state {
                 mark_dirty: Some(Self::ext_state_mark_dirty),
+            },
+            clap_host_tail: clap_host_tail {
+                changed: Some(Self::ext_tail_changed),
             },
             clap_host_thread_check: clap_host_thread_check {
                 is_main_thread: Some(Self::ext_thread_check_is_main_thread),
@@ -482,6 +501,10 @@ impl Host {
             let extension_id_cstr = CStr::from_ptr(extension_id);
             if extension_id_cstr == CLAP_EXT_AUDIO_PORTS {
                 &this.clap_host_audio_ports as *const _ as *const c_void
+            } else if extension_id_cstr == CLAP_EXT_LATENCY {
+                &this.clap_host_latency as *const _ as *const c_void
+            } else if extension_id_cstr == CLAP_EXT_LOG {
+                &this.clap_host_log as *const _ as *const c_void
             } else if extension_id_cstr == CLAP_EXT_NOTE_PORTS {
                 &this.clap_host_note_ports as *const _ as *const c_void
             } else if extension_id_cstr == CLAP_EXT_PRESET_LOAD {
@@ -490,6 +513,8 @@ impl Host {
                 &this.clap_host_params as *const _ as *const c_void
             } else if extension_id_cstr == CLAP_EXT_STATE {
                 &this.clap_host_state as *const _ as *const c_void
+            } else if extension_id_cstr == CLAP_EXT_TAIL {
+                &this.clap_host_tail as *const _ as *const c_void
             } else if extension_id_cstr == CLAP_EXT_THREAD_CHECK {
                 &this.clap_host_thread_check as *const _ as *const c_void
             } else {
@@ -704,6 +729,62 @@ impl Host {
 
             this.assert_main_thread("clap_host_state::mark_dirty()");
             log::debug!("TODO: Handle 'clap_host_state::mark_dirty()'");
+        }
+    }
+
+    unsafe extern "C" fn ext_latency_changed(host: *const clap_host) {
+        unsafe {
+            check_null_ptr!(host, (*host).host_data);
+            let (_, this) = InstanceState::from_clap_host_ptr(host);
+
+            this.assert_main_thread("clap_host_latency::changed()");
+            log::debug!("Plugin reported latency change via 'clap_host_latency::changed()'");
+        }
+    }
+
+    unsafe extern "C" fn ext_tail_changed(host: *const clap_host) {
+        unsafe {
+            check_null_ptr!(host, (*host).host_data);
+            let (_, this) = InstanceState::from_clap_host_ptr(host);
+
+            // Spec: may be called from main or audio thread.
+            log::debug!("Plugin reported tail change via 'clap_host_tail::changed()'");
+            let _ = this;
+        }
+    }
+
+    unsafe extern "C" fn ext_log_log(
+        host: *const clap_host,
+        severity: clap_log_severity,
+        msg: *const c_char,
+    ) {
+        unsafe {
+            check_null_ptr!(host, (*host).host_data, msg);
+            let (_, this) = InstanceState::from_clap_host_ptr(host);
+
+            // log may be called from any thread
+            let _ = this;
+            let message = match util::cstr_ptr_to_mandatory_string(msg) {
+                Ok(s) => s,
+                Err(err) => {
+                    log::error!("Plugin called clap_host_log::log() with invalid msg: {err:#}");
+                    return;
+                }
+            };
+
+            match severity {
+                CLAP_LOG_DEBUG => log::debug!("[plugin] {message}"),
+                CLAP_LOG_INFO => log::info!("[plugin] {message}"),
+                CLAP_LOG_WARNING => log::warn!("[plugin] {message}"),
+                CLAP_LOG_ERROR | CLAP_LOG_FATAL => log::error!("[plugin] {message}"),
+                CLAP_LOG_HOST_MISBEHAVING => {
+                    log::error!("[plugin] host-misbehaving: {message}")
+                }
+                CLAP_LOG_PLUGIN_MISBEHAVING => {
+                    log::warn!("[plugin] plugin-misbehaving: {message}")
+                }
+                other => log::info!("[plugin] (severity {other}) {message}"),
+            }
         }
     }
 

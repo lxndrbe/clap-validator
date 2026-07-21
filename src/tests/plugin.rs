@@ -7,6 +7,7 @@ use super::{TestCase, TestResult};
 use crate::plugin::library::PluginLibrary;
 
 mod descriptor;
+mod extensions;
 mod params;
 mod processing;
 mod state;
@@ -49,6 +50,14 @@ pub enum PluginTestCase {
     StateReproducibilityProcessAfterLoad,
     #[strum(serialize = "state-buffered-streams")]
     StateBufferedStreams,
+    #[strum(serialize = "latency-basic")]
+    LatencyBasic,
+    #[strum(serialize = "tail-basic")]
+    TailBasic,
+    #[strum(serialize = "render-modes")]
+    RenderModes,
+    #[strum(serialize = "state-context-basic")]
+    StateContextBasic,
 }
 
 impl<'a> TestCase<'a> for PluginTestCase {
@@ -140,6 +149,23 @@ impl<'a> TestCase<'a> for PluginTestCase {
                  when reloading and resaving the state.",
                 PluginTestCase::StateReproducibilityBasic
             ),
+            PluginTestCase::LatencyBasic => String::from(
+                "If the plugin implements 'clap.latency', activates the plugin and queries its \
+                 reported latency in samples.",
+            ),
+            PluginTestCase::TailBasic => String::from(
+                "If the plugin implements 'clap.tail', activates the plugin and queries its \
+                 reported processing tail length in samples.",
+            ),
+            PluginTestCase::RenderModes => String::from(
+                "If the plugin implements 'clap.render', queries hard-realtime requirement and \
+                 tries setting realtime and offline render modes. Offline may return false if \
+                 unsupported; realtime must succeed.",
+            ),
+            PluginTestCase::StateContextBasic => String::from(
+                "If the plugin implements 'clap.state-context/2', rejects empty loads and \
+                 roundtrips save/load for preset, duplicate, and project context types.",
+            ),
         }
     }
 
@@ -201,6 +227,14 @@ impl<'a> TestCase<'a> for PluginTestCase {
             }
             PluginTestCase::StateBufferedStreams => {
                 state::test_state_buffered_streams(library, plugin_id)
+            }
+            PluginTestCase::LatencyBasic => {
+                extensions::test_latency_basic(library, plugin_id)
+            }
+            PluginTestCase::TailBasic => extensions::test_tail_basic(library, plugin_id),
+            PluginTestCase::RenderModes => extensions::test_render_modes(library, plugin_id),
+            PluginTestCase::StateContextBasic => {
+                extensions::test_state_context_basic(library, plugin_id)
             }
         };
 

@@ -21,6 +21,26 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.3.5] - 2026-07-21
+
+### Added
+
+- Host extensions: `clap.latency`, `clap.tail`, `clap.log` (in addition to the
+  existing audio-ports / note-ports / params / preset-load / state /
+  thread-check host surface).
+- Plugin extension wrappers: `latency`, `tail`, `render`, `state-context`.
+- Tests (skip if plugin lacks the extension):
+  - `latency-basic`
+  - `tail-basic`
+  - `render-modes`
+  - `state-context-basic`
+
+### Changed
+
+- `clap-sys` now tracks `micahrj/clap-sys` git (CLAP **1.2.3**). crates.io
+  `0.5.0` remains at 1.2.2; free-audio/clap latest is **1.2.10** (bindings not
+  fully ported yet past 1.2.3).
+
 ## [0.3.4] - 2026-07-15
 
 ### Changed

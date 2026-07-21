@@ -1,6 +1,6 @@
 [package]
 name = "clap-validator"
-version = "0.3.4"
+version = "0.3.5"
 edition = "2024"
 license = "MIT"
 
@@ -13,8 +13,9 @@ anyhow = "1.0.58"
 chrono = { version = "0.4.23", features = ["serde"] }
 # All the claps!
 clap = { version = "4.1.8", features = ["derive", "wrap_help"] }
-# CLAP 1.2.2 support (upstream clap-sys tracks ~8 revs behind latest)
-clap-sys = "0.5.0"
+# CLAP 1.2.3 (micahrj/clap-sys master; crates.io 0.5.0 is still 1.2.2).
+# free-audio/clap is at 1.2.10 — clap-sys not yet ported past 1.2.3.
+clap-sys = { git = "https://github.com/micahrj/clap-sys", rev = "429e6a6663f2865b0c0b7dbc4971f2e189dc4d8c" }
 colored = "3.1.1"
 crossbeam = "0.8.1"
 libloading = "0.9.0"
