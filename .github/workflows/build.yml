@@ -11,6 +11,7 @@ on:
   pull_request:
     branches:
       - master
+  workflow_dispatch:
 
 defaults:
   run:
@@ -32,8 +33,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
-      - name: Fetch all git history
-        run: git fetch --force --prune --tags --unshallow
+        with:
+          fetch-depth: 0
 
       - uses: actions/cache@v5
         with:
@@ -47,8 +48,7 @@ jobs:
       - name: Set up Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          # The macOS AArch64 build is done from an x86_64 macOS CI runner, so
-          # it needs to be cross compiled
+          # Empty string is a no-op; x86_64-apple-darwin is the macOS cross build.
           targets: ${{ matrix.cross-target }}
 
       - name: Build the binary
@@ -94,9 +94,9 @@ jobs:
     runs-on: macos-15
     needs: package
     steps:
-      - uses: actions/checkout@v4
-      - name: Fetch all git history
-        run: git fetch --force --prune --tags --unshallow
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Determine the previously build archive names
         run: |
