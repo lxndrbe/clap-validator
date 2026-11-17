@@ -2,15 +2,9 @@ name: Automated Builds
 
 on:
   push:
-    branches:
-      - '**'
     tags:
-      # Run when pushing version tags, since otherwise it's impossible to
-      # restart a successful build after pushing a tag
+      # Version tags only. Branch pushes and PRs go through Test Validate.
       - '*.*.*'
-  pull_request:
-    branches:
-      - master
   workflow_dispatch:
 
 defaults:
