@@ -14,6 +14,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   [`lxndrbe/clap-sys`](https://github.com/lxndrbe/clap-sys).
 - Recognize top-side surround channels `CLAP_SURROUND_TSL` /
   `CLAP_SURROUND_TSR` when recording channel maps.
+- Treat `CLAP_PARAM_IS_ENUM` without `CLAP_PARAM_IS_STEPPED` as an error,
+  matching the bypass-parameter rule and the CLAP params docs.
 
 ## [0.4.1] - 2026-07-19
 
