@@ -283,7 +283,7 @@ impl Proxyable for Indexer {
             indexer_data: CHECK_POINTER,
             name: c"clap-validator".as_ptr(),
             vendor: c"Robbert van der Helm".as_ptr(),
-            url: c"https://github.com/free-audio/clap-validator".as_ptr(),
+            url: c"https://github.com/lxndrbe/clap-validator".as_ptr(),
             version: validator_version().as_ptr(),
             declare_filetype: Some(Self::declare_filetype),
             declare_location: Some(Self::declare_location),

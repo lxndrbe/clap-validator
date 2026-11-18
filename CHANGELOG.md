@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-11-18
+
 ### Changed
 
 - Update `clap-sys` to v0.6.0 (CLAP 1.2.10) via
@@ -16,6 +18,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   `CLAP_SURROUND_TSR` when recording channel maps.
 - Treat `CLAP_PARAM_IS_ENUM` without `CLAP_PARAM_IS_STEPPED` as an error,
   matching the bypass-parameter rule and the CLAP params docs.
+- Point README build badge and development-build downloads at this fork's
+  GitHub Actions artifacts (`nightly.link` is stale/broken).
+- Set package `repository` metadata and host/indexer URLs to
+  `lxndrbe/clap-validator`.
 
 ## [0.4.1] - 2026-07-19
 
