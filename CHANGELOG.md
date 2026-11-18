@@ -12,6 +12,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Update `clap-sys` to v0.6.0 (CLAP 1.2.10) via
   [`lxndrbe/clap-sys`](https://github.com/lxndrbe/clap-sys).
+- Recognize top-side surround channels `CLAP_SURROUND_TSL` /
+  `CLAP_SURROUND_TSR` when recording channel maps.
 
 ## [0.4.1] - 2026-07-19
 
