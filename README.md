@@ -1,13 +1,20 @@
 # clap-validator
 
-[![Automated builds](https://github.com/free-audio/clap-validator/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/free-audio/clap-validator/actions/workflows/build.yml?query=branch%3Amaster)
+[![Automated builds](https://github.com/lxndrbe/clap-validator/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/lxndrbe/clap-validator/actions/workflows/build.yml?query=branch%3Amaster)
 
 A validator and automatic test suite for [CLAP](https://github.com/free-audio/clap) plugins. Clap-validator can automatically test one or more plugins for common bugs and incorrect behavior. See [CHANGELOG](./CHANGELOG.md) for a detailed list of changes and additions in each version.
 
+This repository is maintained at
+[`lxndrbe/clap-validator`](https://github.com/lxndrbe/clap-validator)
+(fork of [`free-audio/clap-validator`](https://github.com/free-audio/clap-validator)).
+
 ## Download
 
-Development builds can be found
-[here](https://nightly.link/free-audio/clap-validator/workflows/build/master).
+Development builds from `master` are published as artifacts on every successful
+[Automated Builds](https://github.com/lxndrbe/clap-validator/actions/workflows/build.yml?query=branch%3Amaster)
+run (Linux, Windows, macOS aarch64/x86_64, and a universal macOS binary).
+Open the latest green run and download the artifact for your platform.
+
 The macOS builds are unsigned and may require Gatekeeper to be disabled or the
 quarantine bit to be removed
 ([instructions](https://disable-gatekeeper.github.io/)).

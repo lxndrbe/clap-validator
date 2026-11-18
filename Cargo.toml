@@ -7,13 +7,13 @@ members = [
 
 [package]
 name = "clap-validator"
-version = "0.4.1"
+version = "0.4.2"
 edition = "2024"
 license = "MIT"
 rust-version = "1.95.0"  # MSRV
 description = "A validator and automatic test suite for CLAP plugins"
 readme = "README.md"
-repository = "https://github.com/free-audio/clap-validator"
+repository = "https://github.com/lxndrbe/clap-validator"
 authors = [
     "Robbert van der Helm <mail@robbertvanderhelm.nl>",
     "Quant1um <blep@amee.ee>"

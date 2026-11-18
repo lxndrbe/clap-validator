@@ -117,7 +117,7 @@ impl Proxyable for PluginShared {
             host_data: CHECK_POINTER,
             name: c"clap-validator".as_ptr(),
             vendor: c"Robbert van der Helm".as_ptr(),
-            url: c"https://github.com/free-audio/clap-validator".as_ptr(),
+            url: c"https://github.com/lxndrbe/clap-validator".as_ptr(),
             version: validator_version().as_ptr(),
             get_extension: Some(Self::clap_get_extension),
             request_restart: Some(Self::clap_request_restart),

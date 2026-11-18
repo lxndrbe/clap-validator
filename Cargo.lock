@@ -153,7 +153,7 @@ source = "git+https://github.com/lxndrbe/clap-sys?tag=v0.6.0#909fc39b64e2ee3d437
 
 [[package]]
 name = "clap-validator"
-version = "0.4.1"
+version = "0.4.2"
 dependencies = [
  "anyhow",
  "basic-toml",
