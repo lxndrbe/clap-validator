@@ -90,6 +90,8 @@ impl TransportState {
         flags |= self.tempo.is_some() as u32 * CLAP_TRANSPORT_HAS_TEMPO;
         flags |= self.time_signature.is_some() as u32 * CLAP_TRANSPORT_HAS_TIME_SIGNATURE;
 
+        let bar_info = self.bar_info();
+
         clap_event_transport {
             flags,
             header: clap_event_header {
@@ -116,11 +118,29 @@ impl TransportState {
             loop_end_beats: i64::MIN,
             loop_start_seconds: i64::MAX,
             loop_end_seconds: i64::MIN,
-            bar_start: 0,
-            bar_number: 0, // TODO: implement those 2
+            bar_start: bar_info
+                .map(|(bar_start, _)| (bar_start * CLAP_BEATTIME_FACTOR as f64).round() as i64)
+                .unwrap_or(0),
+            bar_number: bar_info.map(|(_, bar_number)| bar_number).unwrap_or(0),
             tsig_num: self.time_signature.map(|(n, _)| n).unwrap_or(u16::MAX),
             tsig_denom: self.time_signature.map(|(_, d)| d).unwrap_or(0),
         }
+    }
+
+    /// Compute the current bar start (in beats) and bar number from the beat timeline and time
+    /// signature. Returns `None` when either piece of information is missing or invalid.
+    fn bar_info(&self) -> Option<(f64, i32)> {
+        let position_beats = self.position_beats?;
+        let (tsig_num, tsig_denom) = self.time_signature?;
+        if tsig_num == 0 || tsig_denom == 0 {
+            return None;
+        }
+
+        // CLAP beat time is in quarter notes. Convert the time signature beat unit into quarters.
+        let beats_per_bar = tsig_num as f64 * 4.0 / tsig_denom as f64;
+        let bar_number = (position_beats / beats_per_bar).floor() as i32;
+        let bar_start = bar_number as f64 * beats_per_bar;
+        Some((bar_start, bar_number))
     }
 }
 
