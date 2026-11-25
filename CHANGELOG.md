@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Switch `clap-sys` 0.6.0 dependency from git to crates.io.
+
 ## [0.4.2] - 2026-11-18
 
 ### Changed
